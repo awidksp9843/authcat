@@ -36,7 +36,7 @@
 
 * OTPService: OTP 코드를 관리한다
 * CategoryService: 정렬 처리 등으로 사용자 편의성 제공
-* ExportService: 백업 파일 내보내기 및 외부 백업 파일 가져오기(복원) 제공
+* BackupService: 백업 파일 내보내기 및 외부 백업 파일 가져오기(복원) 제공
 * EncryptionService: 데이터 암호화·복호화 및 보안 저장 전담
 * AuthService: 생체 인증, 자동 잠금, 캡처 방지 등 인증·접근 제어 담당
 
@@ -54,7 +54,7 @@
   * 사용자의 요청에 의해 암호화된 백업 파일을 내보내거나, 외부 백업 파일을 가져와 OTP 데이터를 복원한다
 
 * EncryptionService
-  * actor: OTPService, ExportService
+  * actor: OTPService, BackupService
   * OTP 저장·조회 및 백업 파일 생성에 요구되는 암호화·복호화 로직을 처리한다
 
 * AuthService
@@ -95,7 +95,7 @@
 |---|---|
 | Purpose | OTP 데이터 및 백업 파일에 대한 암호화/복호화 처리 |
 | Approach | OTP 저장/조회 혹은 백업 파일 생성 등 보안이 요구되는 프로세스에 대해 EncryptedSharedPreferences를 통하여 안전하게 필요한 암호화/복호화 로직을 처리하여 제공한다 |
-| Dynamics | OTPService 또는 ExportService의 요청에 의해 암호화/복호화 로직을 처리한다 |
+| Dynamics | OTPService 또는 BackupService의 요청에 의해 암호화/복호화 로직을 처리한다 |
 | Goals | 보안 처리를 한 곳에서 담당하여 관리 및 유지보수가 용이하도록 한다 |
 
 * AuthService
@@ -113,7 +113,7 @@
 2FA로서 제 3자의 인증 수단 접근이 어느정도 배제되지만, 인증 정보가 저장된 기기를 분실 혹은 탈취당하거나 내부 악성 프로그램에 의해 화면 녹화 등을 이용한 탈취 시도 가능성이 여전히 있으므로 AuthService를 통한 생체 인증, 자동 잠금, 캡처 방지 등의 기술을 적용하여 최대한 방지한다.
 
 - 시크릿 코드의 유실
-사용자가 앱 혹은 OTP를 실수로 삭제하는 경우 일반적인 방식으로는 해당 OTP를 사용하던 계정에 접근이 불가능하게 된다. 이를 방지하기 위해서 초기 등록시 사용된 시크릿 값을 백업해둘 필요가 있다. 물론 이것이 유출되면 OTP 자체가 유출되는 것과 동일하므로 암호화 하여 내보낼 필요가 있다. 백업 파일은 ExportService를 통해 내보내고, 동일한 ExportService의 가져오기 기능을 통해 복원할 수 있다.
+사용자가 앱 혹은 OTP를 실수로 삭제하는 경우 일반적인 방식으로는 해당 OTP를 사용하던 계정에 접근이 불가능하게 된다. 이를 방지하기 위해서 초기 등록시 사용된 시크릿 값을 백업해둘 필요가 있다. 물론 이것이 유출되면 OTP 자체가 유출되는 것과 동일하므로 암호화 하여 내보낼 필요가 있다. 백업 파일은 BackupService를 통해 내보내고, 동일한 BackupService의 가져오기 기능을 통해 복원할 수 있다.
 
 ## Glossary
 * **OTP**: One-Time Password, 일정 주기로 갱신되는 일회용 비밀번호
